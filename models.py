@@ -29,3 +29,18 @@ class Event:
         if self.ip:
             bits.append(f"ip={self.ip}")
         return " ".join(bits)
+
+@dataclass
+class Incident:
+    ip:str
+    user:str
+    attempt_count:int
+    window_seconds:int
+    first_seen:int
+    last_seen:int
+    
+    def __repr__(self) -> str:
+        return (
+            f"INCIDENT: {self.attempt_count} failed attempts from {self.ip} "
+            f"in {self.window_seconds}s (last user tried: {self.user})"
+        )
