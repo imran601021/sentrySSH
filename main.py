@@ -3,6 +3,7 @@ from parser import parse_entry
 from tailer import JournalctlSource
 from detectors import DetectionEngine
 from storage import init_db, save_incident
+from alerter import send_telegram_alert 
 
 
 def run():
@@ -24,6 +25,7 @@ def run():
             if incident:
                 print(incident)
                 save_incident(incident)
+                send_telegram_alert(incident)
 
     except KeyboardInterrupt:
         print("\nStopped.")
