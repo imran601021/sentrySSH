@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SSH-IDS Dashboard</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #111;
+            color: #eee;
+            padding: 2rem;
+        }
+        h1 {
+            color: #ff4444;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            text-align: left;
+            padding: 0.5rem;
+            border-bottom: 1px solid #333;
+        }
+        th {
+            color: #888;
+        }
+        tr:hover {
+            background: #1a1a1a;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚨 SSH-IDS Dashboard</h1>
+    <p id="status">Loading...</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>IP</th>
+                <th>User</th>
+                <th>Attempts</th>
+                <th>Window</th>
+            </tr>
+        </thead>
+        <tbody id="incident-rows"></tbody>
+    </table>
+
+    <script>
+        async function loadIncidents() {
+            const response = await fetch('/api/incidents');
+            const incidents = await response.json();
+
+            const tbody = document.getElementById('incident-rows');
+            tbody.innerHTML = '';
+
+            incidents.forEach(incident => {
+    const row = document.createElement('tr');
+    const time = new Date(incident.recorded_at).toLocaleString();
+    row.innerHTML = `
+        <td>${time}</td>
+        <td>${incident.ip}</td>
+        <td>${incident.user}</td>
+        <td>${incident.attempt_count}</td>
+        <td>${incident.window_seconds}s</td>
+    `;
+    tbody.appendChild(row);
+});
+
+            document.getElementById('status').textContent =
+                `${incidents.length} incident(s) — last updated ${new Date().toLocaleTimeString()}`;
+        }
+
+        loadIncidents();
+        setInterval(loadIncidents, 5000);  // refresh every 5 seconds
+    </script>
+</body>
+</html>

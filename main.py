@@ -3,7 +3,7 @@ from parser import parse_entry
 from tailer import JournalctlSource
 from detectors import DetectionEngine
 from storage import init_db, save_incident
-from alerter import send_telegram_alert 
+from alerter import send_telegram_alert
 
 
 def run():

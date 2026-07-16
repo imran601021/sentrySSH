@@ -9,8 +9,7 @@ DB_PATH = "incidents.db"
 def init_db(db_path: str = DB_PATH) -> None:
     """Creates the incidents table if it doesn't already exist. Safe to call every startup."""
     conn = sqlite3.connect(db_path)
-    conn.execute(
-        """
+    conn.execute("""
         CREATE TABLE IF NOT EXISTS incidents (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             ip TEXT NOT NULL,
@@ -21,8 +20,7 @@ def init_db(db_path: str = DB_PATH) -> None:
             last_seen TEXT NOT NULL,
             recorded_at TEXT NOT NULL
         )
-        """
-    )
+        """)
     conn.commit()
     conn.close()
 
@@ -49,6 +47,19 @@ def save_incident(incident: Incident, db_path: str = DB_PATH) -> None:
     conn.close()
 
 
+def get_recent_incidents(limit: int = 50, db_path: str = DB_PATH) -> list[dict]:
+    """Returns the most recent incidents, newest first, as plain dicts."""
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.execute(
+        "SELECT * FROM incidents ORDER BY id DESC LIMIT ?",
+        (limit,),
+    )
+    rows = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return rows
+
+
 if __name__ == "__main__":
     # Smoke test: fake incident, no live traffic needed
     from models import Incident
@@ -63,4 +74,8 @@ if __name__ == "__main__":
         last_seen=datetime.now(),
     )
     save_incident(fake)
-    print("Saved one test incident. Check with: sqlite3 incidents.db 'SELECT * FROM incidents;'")
+    print(
+        "Saved one test incident. Check with: sqlite3 incidents.db 'SELECT * FROM incidents;'"
+    )
+
+    
