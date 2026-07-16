@@ -4,10 +4,13 @@ from tailer import JournalctlSource
 from detectors import DetectionEngine
 from storage import init_db, save_incident
 from alerter import send_telegram_alert
+import os
 
 
 def run():
-    source = JournalctlSource(unit="sshd")  # change to "ssh" if that's your unit
+    source = JournalctlSource(
+        unit=os.environ.get("SSH_IDS_UNIT", "sshd")
+    )  # change to "ssh" if that's your unit
     engine = DetectionEngine(threshold=3, window_seconds=120)
     init_db()
 

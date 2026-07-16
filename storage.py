@@ -1,9 +1,11 @@
 import sqlite3
 from datetime import datetime
-
 from models import Incident
+import os
 
-DB_PATH = "incidents.db"
+DB_PATH = DB_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "incidents.db"
+)
 
 
 def init_db(db_path: str = DB_PATH) -> None:
@@ -77,5 +79,3 @@ if __name__ == "__main__":
     print(
         "Saved one test incident. Check with: sqlite3 incidents.db 'SELECT * FROM incidents;'"
     )
-
-    
