@@ -1,8 +1,3 @@
-"""
-Tests for parser.py — confirms each real-world log line shape is
-correctly recognized and its fields correctly extracted.
-"""
-
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))

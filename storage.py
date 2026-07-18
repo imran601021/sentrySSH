@@ -28,7 +28,6 @@ def init_db(db_path: str = DB_PATH) -> None:
 
 
 def save_incident(incident: Incident, db_path: str = DB_PATH) -> None:
-    """Writes one Incident to the database."""
     conn = sqlite3.connect(db_path)
     conn.execute(
         """
