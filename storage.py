@@ -73,19 +73,3 @@ def prune_old_incidents(days: int = 30, db_path: str = DB_PATH) -> int:
     return deleted
 
 if __name__ == "__main__":
-    # Smoke test: fake incident, no live traffic needed
-    from models import Incident
-
-    init_db()
-    fake = Incident(
-        ip="203.0.113.5",
-        user="admin",
-        attempt_count=3,
-        window_seconds=120,
-        first_seen=datetime.now(),
-        last_seen=datetime.now(),
-    )
-    save_incident(fake)
-    print(
-        "Saved one test incident. Check with: sqlite3 incidents.db 'SELECT * FROM incidents;'"
-    )
