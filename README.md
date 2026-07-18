@@ -10,27 +10,14 @@ web dashboard to monitor everything in real time.
 ---
 
 ## Architecture
-
-```
-┌─────────────┐    ┌──────────┐    ┌──────────────────┐
-│  journalctl │───▶│  Tailer  │───▶│      Parser       │
-│  (live log) │    │ (Layer 2)│    │     (Layer 3)     │
-└─────────────┘    └──────────┘    └─────────┬─────────┘
-                                              │ structured Event
-                                              ▼
-                                    ┌───────────────────┐
-                                    │ Detection Engine   │
-                                    │    (Layer 4)       │
-                                    │ sliding window,    │
-                                    │ per-IP threshold   │
-                                    └─────────┬──────────┘
-                                              │ Incident (on threshold breach)
-                        ┌─────────────────────┼─────────────────────┐
-                        ▼                     ▼                     ▼
-                  ┌───────────┐        ┌────────────┐       ┌──────────────┐
-                  │  SQLite   │        │  Telegram  │       │  Dashboard   │
-                  │  Storage  │        │   Alert    │       │ (Flask, live)│
-                  └───────────┘        └────────────┘       └──────────────┘
+```mermaid
+flowchart TD
+    A[journalctl live log] --> B[Tailer - Layer 2]
+    B --> C[Parser - Layer 3]
+    C -->|structured Event| D[Detection Engine - Layer 4<br/>sliding window, per-IP threshold]
+    D -->|Incident on threshold breach| E[SQLite Storage]
+    D -->|Incident on threshold breach| F[Telegram Alert]
+    D -->|Incident on threshold breach| G[Dashboard - Flask, live]
 ```
 
 Each layer is independently testable and only depends on the structured
