@@ -60,7 +60,17 @@ def get_recent_incidents(limit: int = 50, db_path: str = DB_PATH) -> list[dict]:
     rows = [dict(row) for row in cursor.fetchall()]
     conn.close()
     return rows
-
+def prune_old_incidents(days: int = 30, db_path: str = DB_PATH) -> int:
+    """Deletes incidents older than `days` days. Returns how many rows were removed."""
+    conn = sqlite3.connect(db_path)
+    cursor = conn.execute(
+        "DELETE FROM incidents WHERE recorded_at < datetime('now', ?)",
+        (f"-{days} days",),
+    )
+    deleted = cursor.rowcount
+    conn.commit()
+    conn.close()
+    return deleted
 
 if __name__ == "__main__":
     # Smoke test: fake incident, no live traffic needed
