@@ -1,9 +1,3 @@
-"""
-Tests for detector.py — confirms the sliding-window, per-IP threshold
-logic correctly raises incidents when it should, and doesn't when it
-shouldn't.
-"""
-
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
