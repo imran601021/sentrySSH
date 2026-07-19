@@ -46,7 +46,7 @@ Python 3.11+, Flask, Gunicorn, SQLite, `journalctl`/systemd, Telegram Bot API,
 distros), Python 3.11+.
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/imran601021/sentrySSH.git
 cd ssh-ids/src
 ```
 
