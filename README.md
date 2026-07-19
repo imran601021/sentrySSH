@@ -47,7 +47,7 @@ distros), Python 3.11+.
 
 ```bash
 git clone https://github.com/imran601021/sentrySSH.git
-cd ssh-ids/src
+cd sentrySSH
 ```
 
 Install dependencies with whichever Python package manager you prefer —
